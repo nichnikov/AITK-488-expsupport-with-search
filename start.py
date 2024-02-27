@@ -26,6 +26,6 @@ reader = ReaderRanker(st_model)
 # reader = ReaderRanker(e5_model, e5_tokenizer)
 
 t5_tokenizer = T5Tokenizer.from_pretrained('ai-forever/ruT5-large')
-t5_model = T5ForConditionalGeneration.from_pretrained(os.path.join("data", 'models_bss')).to("cuda")
+t5_model = T5ForConditionalGeneration.from_pretrained(os.path.join("models", 'models_bss')).to("cuda")
 
 validator = Validator(t5_model, t5_tokenizer)

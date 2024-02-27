@@ -19,7 +19,10 @@ def average_pool(last_hidden_states: Tensor, attention_mask: Tensor) -> Tensor:
     last_hidden = last_hidden_states.masked_fill(~attention_mask[..., None].bool(), 0.0)
     return last_hidden.sum(dim=1) / attention_mask.sum(dim=1)[..., None]
 
+
 class ReaderRanker:
+        """_summary_
+        """
         def __init__(self, model, tokenizer=None) -> None:
                self.model = model
                self.tokenizer = tokenizer
@@ -61,6 +64,8 @@ class ReaderRanker:
 
 
 class Validator:
+        """_summary_
+        """
         def __init__(self, t5_model, t5_tokenizer) -> None:
                 self.device = "cuda"
                 self.t5_model = t5_model.to(self.device)
@@ -80,6 +85,9 @@ class Validator:
                 t5_score = sigmoid_0[2].item()
                 val_str = re.sub("</s>", "", outputs_decode)
                 #logger.info("t5_validate answer is {} with score = {}".format(val_str, str(t5_score)))
-                if val_str == "Правда" and t5_score >= score:
-                        return {"Opinion": val_str, "Confidence": t5_score}
-                
+                # if val_str == "Правда" and t5_score >= score:
+                return {"Opinion": val_str, "Confidence": t5_score}
+        
+        def __call__(self, query: str, answer: str, score: float):
+               return self.t5_validate(query, answer, score)
+       
